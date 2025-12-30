@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import Search from './components/Search.jsx'
 import Spinner from './components/Spinner.jsx'
 import MovieCard from './components/MovieCard.jsx'
-// import { useDebounce } from 'react-use'
-// import { getTrendingMovies, updateSearchCount } from './appwrite.js'
+import { useDebounce } from 'react-use'
+import { getTrendingMovies, updateSearchCount } from './appwrite.js'
 
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 
@@ -29,12 +29,11 @@ const App = () => {
 
   // Debounce the search term to prevent making too many API requests
   // by waiting for the user to stop typing for 500ms
-  // useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm])
+  useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm])
 
   const fetchMovies = async (query = '') => {
     setIsLoading(true);
     setErrorMessage('');
-
     try {
       const endpoint = query
         ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
@@ -76,7 +75,6 @@ const App = () => {
       console.error(`Error fetching trending movies: ${error}`);
     }
   }
-
   useEffect(() => {
     fetchMovies(debouncedSearchTerm);
   }, [debouncedSearchTerm]);
